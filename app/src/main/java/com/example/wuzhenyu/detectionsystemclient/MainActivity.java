@@ -1,6 +1,7 @@
 package com.example.wuzhenyu.detectionsystemclient;
 
 import java.io.IOException;
+import java.sql.ClientInfoStatus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -88,8 +89,8 @@ public class MainActivity extends Activity {
     private EditText serverIP;
     private EditText serverPort;
     private Button sendAPFeatures;
-    private WifiManager wifiManager;
-    private WifiInfo wifiInfo;
+    public static WifiManager wifiManager;
+    public static WifiInfo wifiInfo; //保存当前连接wifi信息
     private DhcpInfo dhcpInfo;
     private List<ScanResult> wifiList;
 
@@ -111,7 +112,7 @@ public class MainActivity extends Activity {
     }
 
     LocationClient mLocationClient;
-    BDLocation bdlocation;
+    static BDLocation bdlocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,6 +209,7 @@ public class MainActivity extends Activity {
                         }
                     }
                 }).start();
+                new Thread(new APAccessRecord()).start();//上传当前连接wifi所需信息
                 /*Message msg = new Message();
                 msg.what = 0x1;
                 msg.obj = serverPath;
