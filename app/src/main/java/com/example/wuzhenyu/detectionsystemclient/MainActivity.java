@@ -175,7 +175,7 @@ public class MainActivity extends Activity implements BaiduMap.OnMarkerClickList
     }
 
     private void setAdapter(){
-        WifiInfoAdapter adapter = new WifiInfoAdapter(MainActivity.this, R.layout.wifi_item, wifiInfos);
+        WifiInfoAdapter adapter = new WifiInfoAdapter(MainActivity.this, R.layout.wifi_item_baidumap, wifiInfos);
         ListView listView = (ListView) mPop.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
