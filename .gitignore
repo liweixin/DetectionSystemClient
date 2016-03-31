@@ -39,3 +39,9 @@ Thumbs.db
 
 # OSX files
 .DS_Store
+
+#develope tool infos
+.idea/
+
+#woking infos
+*.iml

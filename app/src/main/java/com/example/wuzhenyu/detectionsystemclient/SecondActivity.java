@@ -87,36 +87,20 @@ public class SecondActivity extends Activity {
     private EditText serverIP;
     private EditText serverPort;
     private Button sendAPFeatures;
-    private WifiManager wifiManager;
-    private WifiInfo wifiInfo;
+    public static WifiManager wifiManager;
+    public static WifiInfo wifiInfo;//保存当前连接wifi信息
     private DhcpInfo dhcpInfo;
     private List<ScanResult> wifiList;
 
-    private Location findLocation(){
-        LocationManager locationManager;
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        List<String> providerList = locationManager.getProviders(true);
-        String provider;
-        if(providerList.contains(LocationManager.GPS_PROVIDER)){
-            provider = LocationManager.GPS_PROVIDER;
-        }else if(providerList.contains(LocationManager.NETWORK_PROVIDER)){
-            provider = LocationManager.NETWORK_PROVIDER;
-        }else{
-            Log.e("Class Location:", "No location provider to use.");
-            return null;
-        }
-        android.location.Location location = locationManager.getLastKnownLocation(provider);
-        return location;
-    }
-
     LocationClient mLocationClient;
-    BDLocation bdlocation;
+    static BDLocation bdlocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.wifi_list);
+        //new Thread(new APAcessRecord()).start();  调试好APAcessRecord后再加上这句话
 
         //定位初始化
         mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
@@ -207,16 +191,6 @@ public class SecondActivity extends Activity {
                         }
                     }
                 }).start();
-                /*Message msg = new Message();
-                msg.what = 0x1;
-                msg.obj = serverPath;
-                clientThread.myHandler.sendMessage(msg);
-                for (int i = 0; i < wifiList.size(); i++) {
-                    msg = new Message();
-                    msg.what = 0x2;
-                    msg.obj = new InfoList(wifiList.get(i), wifiInfo, dhcpInfo, findLocation());
-                    clientThread.myHandler.sendMessage(msg);
-                }*/
             }
         });
     }
