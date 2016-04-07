@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.DhcpInfo;
@@ -100,13 +101,19 @@ public class SecondActivity extends Activity {
         super.onCreate(savedInstanceState);
         SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.wifi_list);
-        //new Thread(new APAcessRecord()).start();  调试好APAcessRecord后再加上这句话
 
         //定位初始化
         mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
         mLocationClient.registerLocationListener(myListener);
         initLocation();
         mLocationClient.start();
+
+        /*Intent serviceIntent = new Intent(getApplicationContext(), SendAPAcessRecordService.class);
+        serviceIntent.putExtra("bssid", "bssid");
+        serviceIntent.putExtra("macAdress", "macAdress");
+        serviceIntent.putExtra("startTime", 0);
+        serviceIntent.putExtra("endTime", 0);
+        getApplicationContext().startService(serviceIntent);//每次总会post两次，很奇怪*/
 
         getScanResults();
         getConnectionInfo();
