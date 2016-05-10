@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -15,6 +16,13 @@ public class ThirdActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wifi_information);
         Intent intent=getIntent();
+        Button traceRoute = (Button) findViewById(R.id.traceroute);
+        traceRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ThirdActivity.this, TraceRouteActivity.class));
+            }
+        });
         TextView ssidView=(TextView)findViewById(R.id.ssidView);
         ssidView.setText(intent.getStringExtra("ssid"));
         TextView bssidView = (TextView) findViewById(R.id.bssidView);
