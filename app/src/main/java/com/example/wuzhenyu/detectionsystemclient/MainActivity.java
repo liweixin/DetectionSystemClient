@@ -355,6 +355,8 @@ public class MainActivity extends Activity implements BaiduMap.OnMarkerClickList
         mBaiduMap.hideInfoWindow();
     }
 
+    public static BDLocation bdLocation;
+
     public class MyLocationListener implements BDLocationListener {
         boolean isFirstLoc = true; // 是否首次定位
 
@@ -364,6 +366,7 @@ public class MainActivity extends Activity implements BaiduMap.OnMarkerClickList
             if (location == null || mMapView == null) {
                 return;
             }
+            bdLocation = location;
             //Log.e("longtitude", location.getLongitude() + "");
             //Log.e("latitude", location.getLatitude() + "");
             MyLocationData locData = new MyLocationData.Builder()
