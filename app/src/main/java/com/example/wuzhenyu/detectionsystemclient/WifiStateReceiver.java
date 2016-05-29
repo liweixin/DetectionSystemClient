@@ -8,6 +8,7 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class WifiStateReceiver extends BroadcastReceiver {
@@ -39,6 +40,15 @@ public class WifiStateReceiver extends BroadcastReceiver {
                 endTime = new Date().getTime();
                 init = true;
             } else if(info.getState().equals(NetworkInfo.State.CONNECTED)){
+                //traceroute
+                List<String> results = new TraceRouteActivity().exe("./data/data/com.example.wuzhenyu.detectionsystemclient/files/traceroute 202.120.36.190");
+                String result = "";
+			/* 将结果转换成字符串, 输出到 TextView中 */
+                for(String line : results){
+                    result += line + "\n";
+                }
+                final String finalResult = result;
+                TraceRouteRecord.sendTraceRouteRecord("http://202.120.36.190:8080/traceroute/upload", Util.getBssid(), Util.getMacAdress(), result);
                 if(init){
                     Intent serviceIntent = new Intent(context, SendAPAcessRecordService.class);
                     serviceIntent.putExtra("bssid", bssid);

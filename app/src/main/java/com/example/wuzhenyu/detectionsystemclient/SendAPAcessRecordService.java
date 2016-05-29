@@ -28,7 +28,7 @@ public class SendAPAcessRecordService extends Service {
             macAdress = intent.getStringExtra("macAdress");
             startTime = intent.getLongExtra("startTime", 0);
             endTime = intent.getLongExtra("endTime", 0);
-            ApAcessRecord.sendApAcessRecord(bssid, macAdress, startTime, endTime);
+            APAcessRecord.sendApAcessRecord(bssid, macAdress, startTime, endTime);
             firstOnStart = false;
         } else {
             firstOnStart = true;

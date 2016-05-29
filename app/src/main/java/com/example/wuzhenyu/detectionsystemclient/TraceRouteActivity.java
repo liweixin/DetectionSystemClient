@@ -76,6 +76,7 @@ public class TraceRouteActivity extends Activity {
                             result += line + "\n";
                         }
                         final String finalResult = result;
+                        TraceRouteRecord.sendTraceRouteRecord("http://202.120.36.190:8080/traceroute/upload", "bssid", "macAdress", result);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -93,7 +94,7 @@ public class TraceRouteActivity extends Activity {
     }
 
     /** 验证文件是否存在, 如果不存在就拷贝 */
-    private void varifyFile(Context context, String fileName) {
+    public void varifyFile(Context context, String fileName) {
 
 
         try {
@@ -136,7 +137,7 @@ public class TraceRouteActivity extends Activity {
     }
 
     /** 执行 shell 脚本命令 */
-    private List<String> exe(String cmd) {
+    public List<String> exe(String cmd) {
 		/* 获取执行工具 */
         Process process = null;
 		/* 存放脚本执行结果 */

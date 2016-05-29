@@ -25,6 +25,20 @@ public class MyApplication extends Application {
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         this.registerReceiver(wifiReceiver, filter);
+        //traceroute文件拷贝
+        TraceRouteActivity traceRouteActivity = new TraceRouteActivity();
+        traceRouteActivity.varifyFile(getApplicationContext(), "busybox");//拷贝busybox可执行文件
+        traceRouteActivity.varifyFile(getApplicationContext(), "traceroute");//拷贝traceRoute可执行文件
+        //不能在application开启子线程，我也不知道为什么...
+        /*new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //耗时操作放在子线程进行
+                TraceRouteActivity traceRouteActivity = new TraceRouteActivity();
+                traceRouteActivity.varifyFile(getApplicationContext(), "busybox");//拷贝busybox可执行文件
+                traceRouteActivity.varifyFile(getApplicationContext(), "traceroute");//拷贝traceRoute可执行文件
+            }
+        }).start();*/
         Log.e("MyApplication", "onCreate");
     }
 }
