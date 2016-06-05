@@ -1,13 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.0"
-
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
     defaultConfig {
-        applicationId "com.example.wuzhenyu.detectionsystemclient"
-        minSdkVersion 10
-        targetSdkVersion 22
+        applicationId "com.prp.detectionsystemclient"
+        minSdkVersion 16
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -21,15 +25,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.0.0'
-    compile files('src/main/jniLibs/BaiduLBS_Android.jar')
-    compile files('src/main/jniLibs/baidumapapi_base_v3_6_1.jar')
-    compile files('src/main/jniLibs/baidumapapi_cloud_v3_6_1.jar')
-    compile files('src/main/jniLibs/baidumapapi_map_v3_6_1.jar')
-    compile files('src/main/jniLibs/baidumapapi_radar_v3_6_1.jar')
-    compile files('src/main/jniLibs/baidumapapi_search_v3_6_1.jar')
-    compile files('src/main/jniLibs/baidumapapi_util_v3_6_1.jar')
-    compile files('src/main/jniLibs/locSDK_6.13.jar')
-    compile files('src/main/jniLibs/volly-1.0.11.jar')
-    compile files('src/main/jniLibs/gson-2.3.1.jar')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
+    compile 'com.google.code.gson:gson:2.3'
+    compile files('libs/BaiduLBS_Android.jar')
 }
