@@ -1,9 +1,11 @@
 package com.prp.detectionsystemclient.RecyclerView2;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.prp.detectionsystemclient.R;
@@ -38,6 +40,37 @@ public class MyWifiInfoAdapter extends RecyclerView.Adapter<MyWifiInfoAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         MyWifiInfo myWifiInfo = datas.get(position);
         holder.content.setText(myWifiInfo.getContent());
+
+        //此处的signal为abs(wifiInfo.level)，level范围是-100~0,所以signal范围是0~100.
+        int signal = myWifiInfo.getSignal();
+        if(signal>=100){
+            throw new IllegalArgumentException("signal should between 0 and 100.");
+        }
+        if(signal<=50){
+            holder.wifiState.setImageResource(R.drawable.wifi_state_4);
+        } else if(signal<=60) {
+            holder.wifiState.setImageResource(R.drawable.wifi_state_3);
+        } else if(signal<=70) {
+            holder.wifiState.setImageResource(R.drawable.wifi_state_2);
+        } else if(signal<=80) {
+            holder.wifiState.setImageResource(R.drawable.wifi_state_1);
+        } else {
+            holder.wifiState.setImageResource(R.drawable.wifi_state_0);
+        }
+
+        //security
+        switch (myWifiInfo.security){
+            case MyWifiInfo.SAFE:
+                holder.security.setImageResource(R.drawable.safe);
+                break;
+            case MyWifiInfo.DANGEROUS:
+                holder.security.setImageResource(R.drawable.dangerous);
+                break;
+            case MyWifiInfo.UNKNOW:
+                holder.security.setImageResource(R.drawable.unknow);
+                break;
+        }
+
         holder.itemView.setTag(myWifiInfo);
     }
 
@@ -70,8 +103,12 @@ public class MyWifiInfoAdapter extends RecyclerView.Adapter<MyWifiInfoAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView content;
+        public ImageView wifiState;
+        public ImageView security;
         public ViewHolder (View view){
             super(view);
+            security = (ImageView) view.findViewById(R.id.security);
+            wifiState = (ImageView) view.findViewById(R.id.iv);
             content = (TextView) view.findViewById(R.id.tv);
         }
     }

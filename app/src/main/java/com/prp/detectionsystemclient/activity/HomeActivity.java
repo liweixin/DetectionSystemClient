@@ -29,6 +29,7 @@ import com.prp.detectionsystemclient.fragment.ThreeFragment;
 import com.prp.detectionsystemclient.fragment.WifiListFragment;
 import com.prp.detectionsystemclient.fragment.WifiMapFragment;
 import com.prp.detectionsystemclient.util.Util;
+import com.prp.detectionsystemclient.view.TabButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +39,10 @@ public class HomeActivity extends FragmentActivity implements OnClickListener, A
     /**
      * 四个导航按钮
      */
-    Button buttonOne;
-    Button buttonTwo;
-    Button buttonThree;
-    Button buttonFour;
+    TabButton buttonOne;
+    TabButton buttonTwo;
+    TabButton buttonThree;
+    TabButton buttonFour;
 
     /**
      * 作为页面容器的ViewPager
@@ -81,15 +82,17 @@ public class HomeActivity extends FragmentActivity implements OnClickListener, A
         //toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         delegate.setSupportActionBar(toolbar);*/
 
-        buttonOne=(Button)findViewById(R.id.btn_one);
-        buttonTwo=(Button)findViewById(R.id.btn_two);
-        buttonThree=(Button)findViewById(R.id.btn_three);
-        buttonFour=(Button)findViewById(R.id.btn_four);
+        buttonOne=(TabButton)findViewById(R.id.btn_one);
+        buttonTwo=(TabButton)findViewById(R.id.btn_two);
+        buttonThree=(TabButton)findViewById(R.id.btn_three);
+        buttonFour=(TabButton)findViewById(R.id.btn_four);
 
         buttonOne.setOnClickListener(this);
         buttonTwo.setOnClickListener(this);
         buttonThree.setOnClickListener(this);
         buttonFour.setOnClickListener(this);
+
+        resetState(R.id.btn_one);
 
         mViewPager=(ViewPager) findViewById(R.id.viewpager);
         fragmentList=new ArrayList<Fragment>();
@@ -102,12 +105,36 @@ public class HomeActivity extends FragmentActivity implements OnClickListener, A
         screenWidth=getResources().getDisplayMetrics().widthPixels;
 
         buttonTwo.measure(0, 0);
-        imageviewOvertab=(ImageView) findViewById(R.id.imgv_overtab);
+        /*imageviewOvertab=(ImageView) findViewById(R.id.imgv_overtab);
         RelativeLayout.LayoutParams imageParams=new RelativeLayout.LayoutParams(screenWidth/4, buttonTwo.getMeasuredHeight());
         imageParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        imageviewOvertab.setLayoutParams(imageParams);
+        imageviewOvertab.setLayoutParams(imageParams);*/
 
         mViewPager.setAdapter(new MyFrageStatePagerAdapter(getSupportFragmentManager()));
+    }
+
+    private void resetState(int id) {
+        // 将四个按钮背景设置为未选中
+        buttonOne.setSelected(false);
+        buttonTwo.setSelected(false);
+        buttonThree.setSelected(false);
+        buttonFour.setSelected(false);
+
+        // 将点击的按钮背景设置为已选中
+        switch (id) {
+            case R.id.btn_one:
+                buttonOne.setSelected(true);
+                break;
+            case R.id.btn_two:
+                buttonTwo.setSelected(true);
+                break;
+            case R.id.btn_three:
+                buttonThree.setSelected(true);
+                break;
+            case R.id.btn_four:
+                buttonFour.setSelected(true);
+                break;
+        }
     }
 
     @Override
@@ -161,7 +188,7 @@ public class HomeActivity extends FragmentActivity implements OnClickListener, A
             {
                 return ;
             }
-            imageMove(mViewPager.getCurrentItem());
+            //imageMove(mViewPager.getCurrentItem());
             currenttab=mViewPager.getCurrentItem();
         }
 
@@ -190,6 +217,7 @@ public class HomeActivity extends FragmentActivity implements OnClickListener, A
     @Override
     public void onClick(View v)
     {
+        resetState(v.getId());
         switch (v.getId())
         {
             case R.id.btn_one:

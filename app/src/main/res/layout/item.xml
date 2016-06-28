@@ -3,12 +3,23 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/iv"
-        android:src="@drawable/wifi"
+    <RelativeLayout
         android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv"
+            android:src="@drawable/wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/security"
+            android:src="@drawable/unknow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/iv"
+            android:layout_alignBottom="@+id/iv"/>
+    </RelativeLayout>
     <TextView
         android:id="@+id/tv"
         android:textSize="12sp"

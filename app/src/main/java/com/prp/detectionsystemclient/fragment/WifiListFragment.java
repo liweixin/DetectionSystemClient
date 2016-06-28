@@ -115,7 +115,7 @@ public class WifiListFragment extends Fragment{
         List<MyWifiInfo> list = new ArrayList<>();
         List<ScanResult> wifilist = ScanAndUploeadNearbyWifi.getWifiList();
         for(int i=0; i<wifilist.size(); i++){
-            list.add(new MyWifiInfo(wifilist.get(i).SSID));
+            list.add(new MyWifiInfo(wifilist.get(i).SSID, Math.abs(wifilist.get(i).level)));
         }
         recyclerView.setAdapter(adapter = new MyWifiInfoAdapter(list));
         adapter.setmOnItemClickListener(new MyWifiInfoOnItemClickListener() {

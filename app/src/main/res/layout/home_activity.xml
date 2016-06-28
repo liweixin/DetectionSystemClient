@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/wifilist_bg">
 
     <!-- 底部四个导航按钮 -->
@@ -11,49 +12,45 @@
         android:orientation="horizontal"
         >
 
-        <Button
+        <com.prp.detectionsystemclient.view.TabButton
             android:id="@+id/btn_one"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="wifi列表"
-            android:background="@color/white"
-            android:textColor="@color/black"
-            />
-        <Button
+            android:layout_height="50dp"
+            android:text="Wifi列表"
+            custom:normal_bg_res="@drawable/btn_left"
+            custom:selected_bg_res="@drawable/btn_left_selected"/>
+        <com.prp.detectionsystemclient.view.TabButton
             android:id="@+id/btn_two"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="wifi地图"
-            android:background="@color/white"
-            android:textColor="@color/black"
-            />
-        <Button
+            android:layout_height="50dp"
+            android:text="Wifi地图"
+            custom:normal_bg_res="@drawable/btn_center"
+            custom:selected_bg_res="@drawable/btn_center_selected"/>
+        <com.prp.detectionsystemclient.view.TabButton
             android:id="@+id/btn_three"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="待用"
-            android:background="@color/white"
-            android:textColor="@color/black"
-            />
-        <Button
+            android:layout_height="50dp"
+            android:text="设置"
+            custom:normal_bg_res="@drawable/btn_center"
+            custom:selected_bg_res="@drawable/btn_center_selected"/>
+        <com.prp.detectionsystemclient.view.TabButton
             android:id="@+id/btn_four"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="待用"
-            android:background="@color/white"
-            android:textColor="@color/black"
-            />
+            android:layout_height="50dp"
+            android:text="备用"
+            custom:normal_bg_res="@drawable/btn_right"
+            custom:selected_bg_res="@drawable/btn_right_selected"/>
 
     </LinearLayout>
 
     <!-- 导航和视图的分割线 -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="0dp"
         android:background="@color/grey"
         android:id="@+id/view"
         android:layout_below="@+id/ll_tabs"
@@ -61,12 +58,14 @@
         android:layout_alignParentStart="true" />
 
     <!-- 覆盖在导航按钮上的覆盖层，表示选中项 -->
+    <!--
     <ImageView
         android:id="@+id/imgv_overtab"
         android:layout_width="60dp"
         android:layout_height="10dp"
         android:background="@color/lightskybluealpha"
         android:layout_above="@+id/view" />
+        -->
 
     <!-- VIewPager 主要是加载内容的 -->
     <android.support.v4.view.ViewPager
