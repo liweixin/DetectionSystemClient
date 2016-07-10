@@ -35,6 +35,7 @@ import com.prp.detectionsystemclient.function.TraceRoute;
 import com.prp.detectionsystemclient.network.Network;
 import com.prp.detectionsystemclient.network.StringPostRequest;
 import com.prp.detectionsystemclient.util.Util;
+import com.prp.detectionsystemclient.view.TabButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +45,7 @@ import java.util.Map;
 /**
  * Created by lwx on 2016/6/3.
  */
-public class WifiListFragment extends Fragment{
+public class WifiListFragment extends Fragment implements View.OnClickListener{
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     MyWifiInfoAdapter adapter;
@@ -53,17 +54,20 @@ public class WifiListFragment extends Fragment{
 
     TextView success, total;
 
+    TabButton buttonOne, buttonTwo, buttonThree;
+
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstance){
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstance) {
         mView = inflater.inflate(R.layout.fragment_wifilist, container, false);
-        success = (TextView) mView.findViewById(R.id.success);
+        /*success = (TextView) mView.findViewById(R.id.success);
         total = (TextView) mView.findViewById(R.id.total);
         //重新设置数值，当fragment重新载入后可以获取值
         success.setText(String.valueOf(cnt[0]));
-        total.setText(String.valueOf(cnt[0] + cnt[1]));
+        total.setText(String.valueOf(cnt[0] + cnt[1]));*/
+        initButton();
         FloatingActionButton fab = (FloatingActionButton) mView.findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +84,15 @@ public class WifiListFragment extends Fragment{
             initRecyclerView();
         }
         return mView;
+    }
+    private void initButton(){
+        buttonOne=(TabButton) mView.findViewById(R.id.btn_one);
+        buttonTwo=(TabButton) mView.findViewById(R.id.btn_two);
+        buttonThree=(TabButton) mView.findViewById(R.id.btn_three);
+
+        buttonOne.setOnClickListener(this);
+        buttonTwo.setOnClickListener(this);
+        buttonThree.setOnClickListener(this);
     }
     public static void setSnackbarMessageTextColor(Snackbar snackbar, int color) {
         View view = snackbar.getView();
@@ -162,8 +175,8 @@ public class WifiListFragment extends Fragment{
                         if(response.equals("{'info': 'Update Success.', 'code': 1}")){
                             //不能用cnt,因为cnt是内部类中引用的外部变量，必须声明为final，而tinal int cnt无法改变其值
                             cnt[0]++;
-                            success.setText(cnt[0]+"");
-                            total.setText(ScanAndUploeadNearbyWifi.getWifiList().size()+"");
+                            //success.setText(cnt[0]+"");
+                            //total.setText(ScanAndUploeadNearbyWifi.getWifiList().size()+"");
                         }
                         Log.e(ScanAndUploeadNearbyWifi.getWifiList().size()+"", cnt[0]+"");
                         checkResult();
@@ -200,8 +213,8 @@ public class WifiListFragment extends Fragment{
                             public void onResponse(String response) {
                                 Log.d("traceResponse", response);
                                 //检测traceRoute结果是否正确
-                                Util.toast("traceRoute信息上传成功");
-                                Util.toast(finalResult);
+                                //Util.toast("traceRoute信息上传成功");
+                                //Util.toast(finalResult);
                             }
                         }, new Response.ErrorListener() {
                     @Override
@@ -216,7 +229,7 @@ public class WifiListFragment extends Fragment{
         initRecyclerView();
     }
     public void checkResult(){
-        if(cnt[0]+cnt[1]==ScanAndUploeadNearbyWifi.getWifiList().size()){
+        /*if(cnt[0]+cnt[1]==ScanAndUploeadNearbyWifi.getWifiList().size()){
             if(cnt[1]==0){
                 //全部上传成功
                 Util.toast("Wifi信息上传成功:" + cnt[0] + "/" + cnt[0]);
@@ -227,7 +240,7 @@ public class WifiListFragment extends Fragment{
                 //部分上传成功
                 Util.toast("Wifi信息部分上传成功" + cnt[0] + "/" + (cnt[0]+cnt[1]));
             }
-        }
+        }*/
     }
     int hindCnt = 0;
     public int getCnt(){
@@ -238,6 +251,52 @@ public class WifiListFragment extends Fragment{
             "我们会收集你周边的wifi信息，用来更好的检测钓鱼wifi",
             "但并不会侵犯您的隐私，请放心使用",
             "如果发现什么bug或者有好的建议可以联系qq627632598"};
+
+    @Override
+    public void onClick(View v)
+    {
+        resetState(v.getId());
+        switch (v.getId())
+        {
+            case R.id.btn_one:
+                changeView(0);
+                break;
+            case R.id.btn_two:
+                changeView(1);
+                break;
+            case R.id.btn_three:
+                changeView(2);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void changeView(int id){
+        MyWifiInfoAdapter.securityFilter = 1-id;
+        adapter.notifyDataSetChanged();
+    }
+
+    private void resetState(int id) {
+        // 将四个按钮背景设置为未选中
+        buttonOne.setSelected(false);
+        buttonTwo.setSelected(false);
+        buttonThree.setSelected(false);
+
+        // 将点击的按钮背景设置为已选中
+        switch (id) {
+            case R.id.btn_one:
+                buttonOne.setSelected(true);
+                break;
+            case R.id.btn_two:
+                buttonTwo.setSelected(true);
+                break;
+            case R.id.btn_three:
+                buttonThree.setSelected(true);
+                break;
+        }
+    }
+
     public class MyLocationListener implements BDLocationListener {
 
         @Override

@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class MyWifiInfoAdapter extends RecyclerView.Adapter<MyWifiInfoAdapter.ViewHolder> implements View.OnClickListener {
 
+    public static int securityFilter = -1;
+
     private MyWifiInfoOnItemClickListener mOnItemClickListener = null;
     public void setmOnItemClickListener(MyWifiInfoOnItemClickListener listener){
         this.mOnItemClickListener = listener;
@@ -39,6 +41,7 @@ public class MyWifiInfoAdapter extends RecyclerView.Adapter<MyWifiInfoAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         MyWifiInfo myWifiInfo = datas.get(position);
+
         holder.content.setText(myWifiInfo.getContent());
 
         //此处的signal为abs(wifiInfo.level)，level范围是-100~0,所以signal范围是0~100.

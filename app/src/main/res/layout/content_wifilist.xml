@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
         android:layout_gravity="center"
@@ -8,32 +10,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
-        android:text="正在上传附近WIFI信息，请稍等"
+        android:text="正在检测周围wifi安全性，请稍等"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <LinearLayout
-        android:gravity="center"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/success"
-            android:text="0"
-            android:textSize="40sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:text="/"
-            android:textSize="40sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/total"
-            android:text="0"
-            android:textSize="40sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <com.prp.detectionsystemclient.view.TabButton
+            android:id="@+id/btn_one"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:text="安全wifi"
+            custom:normal_bg_res="@drawable/btn_left"
+            custom:selected_bg_res="@drawable/btn_left_selected"/>
+        <com.prp.detectionsystemclient.view.TabButton
+            android:id="@+id/btn_two"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:text="可疑wifi"
+            custom:normal_bg_res="@drawable/btn_center"
+            custom:selected_bg_res="@drawable/btn_center_selected"/>
+        <com.prp.detectionsystemclient.view.TabButton
+            android:id="@+id/btn_three"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:text="所有"
+            custom:normal_bg_res="@drawable/btn_right"
+            custom:selected_bg_res="@drawable/btn_right_selected"/>
     </LinearLayout>
 
     <TextView
