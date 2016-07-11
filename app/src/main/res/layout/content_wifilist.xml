@@ -4,44 +4,76 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
-        android:layout_gravity="center"
-        android:src="@drawable/progress_demo"
+
+    <LinearLayout
+        android:id="@+id/progress_group"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:text="正在检测周围wifi安全性，请稍等"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+        <com.daimajia.numberprogressbar.NumberProgressBar
+            android:id="@+id/number_progress_bar"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            />
+        <TextView
+            android:text="正在分析周围wifi安全性，请稍等……"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+    </LinearLayout>
+
+    <include layout="@layout/item" android:id="@+id/myWifi"/>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.prp.detectionsystemclient.view.TabButton
-            android:id="@+id/btn_one"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp">
+        <TextView
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="40dp"
-            android:text="安全wifi"
+            android:text="过滤器:"/>
+        <com.prp.detectionsystemclient.view.TabButton
+            android:id="@+id/btn_one"
+            android:layout_height="30dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="安全"
+            android:textSize="12sp"
             custom:normal_bg_res="@drawable/btn_left"
             custom:selected_bg_res="@drawable/btn_left_selected"/>
         <com.prp.detectionsystemclient.view.TabButton
             android:id="@+id/btn_two"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="40dp"
-            android:text="可疑wifi"
+            android:layout_height="30dp"
+            android:text="可疑"
+            android:textSize="12sp"
             custom:normal_bg_res="@drawable/btn_center"
             custom:selected_bg_res="@drawable/btn_center_selected"/>
         <com.prp.detectionsystemclient.view.TabButton
             android:id="@+id/btn_three"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:text="所有"
+            android:textSize="12sp"
             custom:normal_bg_res="@drawable/btn_right"
             custom:selected_bg_res="@drawable/btn_right_selected"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:text=""/>
     </LinearLayout>
 
     <TextView
@@ -51,7 +83,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="85dp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>

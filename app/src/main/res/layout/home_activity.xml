@@ -18,6 +18,7 @@
             android:layout_weight="1"
             android:layout_height="50dp"
             android:text="Wifi列表"
+            android:textSize="15sp"
             custom:normal_bg_res="@drawable/btn_left"
             custom:selected_bg_res="@drawable/btn_left_selected"/>
         <com.prp.detectionsystemclient.view.TabButton
@@ -26,6 +27,7 @@
             android:layout_weight="1"
             android:layout_height="50dp"
             android:text="Wifi地图"
+            android:textSize="15sp"
             custom:normal_bg_res="@drawable/btn_center"
             custom:selected_bg_res="@drawable/btn_center_selected"/>
         <com.prp.detectionsystemclient.view.TabButton
@@ -34,6 +36,7 @@
             android:layout_weight="1"
             android:layout_height="50dp"
             android:text="设置"
+            android:textSize="15sp"
             custom:normal_bg_res="@drawable/btn_center"
             custom:selected_bg_res="@drawable/btn_center_selected"/>
         <com.prp.detectionsystemclient.view.TabButton
@@ -42,6 +45,7 @@
             android:layout_weight="1"
             android:layout_height="50dp"
             android:text="备用"
+            android:textSize="15sp"
             custom:normal_bg_res="@drawable/btn_right"
             custom:selected_bg_res="@drawable/btn_right_selected"/>
 

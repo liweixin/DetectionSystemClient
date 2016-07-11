@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.prp.detectionsystemclient.R;
 import com.prp.detectionsystemclient.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,8 +27,10 @@ public class MyWifiInfoAdapter extends RecyclerView.Adapter<MyWifiInfoAdapter.Vi
     }
 
     public List<MyWifiInfo> datas;
+    public List<MyWifiInfo> allDatas = new ArrayList<>();
     public MyWifiInfoAdapter(List<MyWifiInfo> datas){
         this.datas = datas;
+        allDatas.addAll(datas);
     }
 
     @Override
@@ -80,6 +83,22 @@ public class MyWifiInfoAdapter extends RecyclerView.Adapter<MyWifiInfoAdapter.Vi
     @Override
     public int getItemCount() {
         return datas.size();
+    }
+
+    public void flushFilter(){
+        datas = new ArrayList<>();
+        datas.addAll(allDatas);
+        notifyDataSetChanged();
+    }
+
+    public void setFilter(int securityLevel){
+        datas = new ArrayList<>();
+        for(MyWifiInfo obj : allDatas){
+            if(obj.getSecurity()>=securityLevel){
+                datas.add(obj);
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.TimeUtils;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -24,6 +26,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.Poi;
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.prp.detectionsystemclient.MyApplication;
 import com.prp.detectionsystemclient.R;
 import com.prp.detectionsystemclient.RecyclerView2.MyWifiInfoAdapter;
@@ -45,14 +48,12 @@ import java.util.Map;
 /**
  * Created by lwx on 2016/6/3.
  */
-public class WifiListFragment extends Fragment implements View.OnClickListener{
+public class WifiListFragment extends Fragment implements View.OnClickListener {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     MyWifiInfoAdapter adapter;
     View mView;
     boolean upload = false;
-
-    TextView success, total;
 
     TabButton buttonOne, buttonTwo, buttonThree;
 
@@ -62,12 +63,22 @@ public class WifiListFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstance) {
         mView = inflater.inflate(R.layout.fragment_wifilist, container, false);
-        /*success = (TextView) mView.findViewById(R.id.success);
-        total = (TextView) mView.findViewById(R.id.total);
+        LinearLayout layout = (LinearLayout) mView.findViewById(R.id.myWifi);
+        LinearLayout progressGroup = (LinearLayout) mView.findViewById(R.id.progress_group);
+        List<?> list = ScanAndUploeadNearbyWifi.getWifiList();
+        if(list!=null&&cnt[0]==list.size()){
+            layout.setVisibility(View.VISIBLE);
+            progressGroup.setVisibility(View.GONE);
+        } else {
+            //progressGroup.setVisibility(View.VISIBLE);
+            layout.setVisibility(View.GONE);
+        }
         //重新设置数值，当fragment重新载入后可以获取值
-        success.setText(String.valueOf(cnt[0]));
-        total.setText(String.valueOf(cnt[0] + cnt[1]));*/
+        if(bnp!=null){
+            bnp.setProgress(100);
+        }
         initButton();
+        initProgressBar();
         FloatingActionButton fab = (FloatingActionButton) mView.findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +96,13 @@ public class WifiListFragment extends Fragment implements View.OnClickListener{
         }
         return mView;
     }
+
+    NumberProgressBar bnp;
+
+    private void initProgressBar(){
+        bnp = (NumberProgressBar) mView.findViewById(R.id.number_progress_bar);
+        //bnp.setOnProgressBarListener(this);
+    }
     private void initButton(){
         buttonOne=(TabButton) mView.findViewById(R.id.btn_one);
         buttonTwo=(TabButton) mView.findViewById(R.id.btn_two);
@@ -93,6 +111,7 @@ public class WifiListFragment extends Fragment implements View.OnClickListener{
         buttonOne.setOnClickListener(this);
         buttonTwo.setOnClickListener(this);
         buttonThree.setOnClickListener(this);
+        resetState(R.id.btn_one);
     }
     public static void setSnackbarMessageTextColor(Snackbar snackbar, int color) {
         View view = snackbar.getView();
@@ -175,8 +194,30 @@ public class WifiListFragment extends Fragment implements View.OnClickListener{
                         if(response.equals("{'info': 'Update Success.', 'code': 1}")){
                             //不能用cnt,因为cnt是内部类中引用的外部变量，必须声明为final，而tinal int cnt无法改变其值
                             cnt[0]++;
-                            //success.setText(cnt[0]+"");
-                            //total.setText(ScanAndUploeadNearbyWifi.getWifiList().size()+"");
+                            int size = ScanAndUploeadNearbyWifi.getWifiList().size();
+                            if(cnt[0]==size){
+                                //所有wifi均成功上传，设置进度条满。
+                                bnp.setProgress(100);
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try{
+                                            Thread.sleep(1000);
+                                        } catch (Exception e){
+                                            e.printStackTrace();
+                                        }
+                                        getActivity().runOnUiThread(new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                LinearLayout layout = (LinearLayout) mView.findViewById(R.id.progress_group);
+                                                layout.setVisibility(View.GONE);
+                                            }
+                                        }));
+                                    }
+                                }).start();
+                            } else {
+                                bnp.incrementProgressBy(100/size);
+                            }
                         }
                         Log.e(ScanAndUploeadNearbyWifi.getWifiList().size()+"", cnt[0]+"");
                         checkResult();
@@ -229,7 +270,7 @@ public class WifiListFragment extends Fragment implements View.OnClickListener{
         initRecyclerView();
     }
     public void checkResult(){
-        /*if(cnt[0]+cnt[1]==ScanAndUploeadNearbyWifi.getWifiList().size()){
+        if(cnt[0]+cnt[1]==ScanAndUploeadNearbyWifi.getWifiList().size()){
             if(cnt[1]==0){
                 //全部上传成功
                 Util.toast("Wifi信息上传成功:" + cnt[0] + "/" + cnt[0]);
@@ -240,7 +281,7 @@ public class WifiListFragment extends Fragment implements View.OnClickListener{
                 //部分上传成功
                 Util.toast("Wifi信息部分上传成功" + cnt[0] + "/" + (cnt[0]+cnt[1]));
             }
-        }*/
+        }
     }
     int hindCnt = 0;
     public int getCnt(){
@@ -274,6 +315,7 @@ public class WifiListFragment extends Fragment implements View.OnClickListener{
 
     private void changeView(int id){
         MyWifiInfoAdapter.securityFilter = 1-id;
+        adapter.setFilter(1-id);
         adapter.notifyDataSetChanged();
     }
 
