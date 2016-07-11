@@ -3,6 +3,7 @@ package com.prp.detectionsystemclient.fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -111,7 +112,7 @@ public class WifiListFragment extends Fragment implements View.OnClickListener {
         buttonOne.setOnClickListener(this);
         buttonTwo.setOnClickListener(this);
         buttonThree.setOnClickListener(this);
-        resetState(R.id.btn_one);
+        resetState(R.id.btn_three);
     }
     public static void setSnackbarMessageTextColor(Snackbar snackbar, int color) {
         View view = snackbar.getView();
@@ -147,12 +148,25 @@ public class WifiListFragment extends Fragment implements View.OnClickListener {
         List<MyWifiInfo> list = new ArrayList<>();
         List<ScanResult> wifilist = ScanAndUploeadNearbyWifi.getWifiList();
         for(int i=0; i<wifilist.size(); i++){
-            list.add(new MyWifiInfo(wifilist.get(i).SSID, Math.abs(wifilist.get(i).level)));
+            list.add(new MyWifiInfo(wifilist.get(i).SSID, Math.abs(wifilist.get(i).level), wifilist.get(i).BSSID));
         }
         recyclerView.setAdapter(adapter = new MyWifiInfoAdapter(list));
         adapter.setmOnItemClickListener(new MyWifiInfoOnItemClickListener() {
             @Override
             public void onItemClick(View view, MyWifiInfo item) {
+                List<WifiConfiguration> configurationList = ScanAndUploeadNearbyWifi.wifiManager.getConfiguredNetworks();
+                for(WifiConfiguration configuration:configurationList){
+                    //去除返回的双引号
+                    String ssid = configuration.SSID;
+                    ssid = ssid.substring(1, ssid.length()-1);
+                    if(ssid.equals(item.getContent())){
+                        //没有使用BSSID，因为它没有被set，始终为null
+                        //使用SSID作为判断，因为SSID有重复，所以用户可能被连上错误的同名WIFI
+                        Util.toast("正在将wifi切换至"+item.getContent());
+                        ScanAndUploeadNearbyWifi.wifiManager.enableNetwork(configuration.networkId,false);
+                    }
+                    Log.e(configuration.SSID, item.getContent());
+                }
                 Util.toast(item.getContent() + " pressed.");
             }
         });

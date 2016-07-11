@@ -85,12 +85,6 @@ public class MyWifiInfoAdapter extends RecyclerView.Adapter<MyWifiInfoAdapter.Vi
         return datas.size();
     }
 
-    public void flushFilter(){
-        datas = new ArrayList<>();
-        datas.addAll(allDatas);
-        notifyDataSetChanged();
-    }
-
     public void setFilter(int securityLevel){
         datas = new ArrayList<>();
         for(MyWifiInfo obj : allDatas){

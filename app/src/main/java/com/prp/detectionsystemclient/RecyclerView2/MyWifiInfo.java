@@ -12,6 +12,7 @@ public class MyWifiInfo {
     String content;
     int signal;
     int security;
+    String bssid;
 
     public int getSecurity() {
         return security;
@@ -21,9 +22,10 @@ public class MyWifiInfo {
         this.security = security;
     }
 
-    public MyWifiInfo(String content, int signal){
+    public MyWifiInfo(String content, int signal, String bssid){
         this.content = content;
         this.signal = signal;
+        this.bssid = bssid;
         Random random = new Random();
         security = random.nextInt(3) - 1;
     }
@@ -40,5 +42,13 @@ public class MyWifiInfo {
 
     public void setSignal(int signal) {
         this.signal = signal;
+    }
+
+    public String getBssid() {
+        return bssid;
+    }
+
+    public void setBssid(String bssid) {
+        this.bssid = bssid;
     }
 }

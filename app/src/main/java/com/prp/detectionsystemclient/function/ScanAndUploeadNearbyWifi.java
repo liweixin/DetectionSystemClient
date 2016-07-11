@@ -20,9 +20,11 @@ import java.util.Map;
 public class ScanAndUploeadNearbyWifi {
     static List<ScanResult> wifiList = null;
     static WifiInfo wifiInfo = null;
+    public static WifiManager wifiManager;
     public static void scan(WifiManager wifiManager, Response.Listener<String> listener, Response.ErrorListener errorListener){
         wifiList = wifiManager.getScanResults();
         wifiInfo = wifiManager.getConnectionInfo();
+        ScanAndUploeadNearbyWifi.wifiManager = wifiManager;
         Log.d("wifilist", wifiList.toString());
         for(int i=0; i<wifiList.size(); i++){
             upload("apFeatures", wifiList.get(i), listener, errorListener); //上传扫描到的周围wifi信息
