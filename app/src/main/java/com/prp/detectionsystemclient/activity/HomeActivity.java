@@ -30,6 +30,7 @@ import com.prp.detectionsystemclient.fragment.WifiListFragment;
 import com.prp.detectionsystemclient.fragment.WifiMapFragment;
 import com.prp.detectionsystemclient.util.Util;
 import com.prp.detectionsystemclient.view.TabButton;
+import com.prp.detectionsystemclient.view.ViewPagerEx;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class HomeActivity extends FragmentActivity implements OnClickListener, A
     /**
      * 作为页面容器的ViewPager
      */
-    ViewPager mViewPager;
+    ViewPagerEx mViewPager;
     /**
      * 页面集合
      */
@@ -94,7 +95,36 @@ public class HomeActivity extends FragmentActivity implements OnClickListener, A
 
         resetState(R.id.btn_one);
 
-        mViewPager=(ViewPager) findViewById(R.id.viewpager);
+        mViewPager=(ViewPagerEx) findViewById(R.id.viewpager);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        resetState(R.id.btn_one);
+                        break;
+                    case 1:
+                        resetState(R.id.btn_two);
+                        break;
+                    case 2:
+                        resetState(R.id.btn_three);
+                        break;
+                    case 3:
+                        resetState(R.id.btn_four);
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         fragmentList=new ArrayList<Fragment>();
 
         fragmentList.add(wifiListFragment = new WifiListFragment());
