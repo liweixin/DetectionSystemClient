@@ -68,7 +68,7 @@ public class WifiListFragment extends Fragment implements View.OnClickListener {
         LinearLayout progressGroup = (LinearLayout) mView.findViewById(R.id.progress_group);
         List<?> list = ScanAndUploeadNearbyWifi.getWifiList();
         if(list!=null&&cnt[0]==list.size()){
-            layout.setVisibility(View.VISIBLE);
+            layout.setVisibility(View.GONE);
             progressGroup.setVisibility(View.GONE);
         } else {
             //progressGroup.setVisibility(View.VISIBLE);
@@ -287,7 +287,8 @@ public class WifiListFragment extends Fragment implements View.OnClickListener {
         if(cnt[0]+cnt[1]==ScanAndUploeadNearbyWifi.getWifiList().size()){
             if(cnt[1]==0){
                 //全部上传成功
-                Util.toast("Wifi信息上传成功:" + cnt[0] + "/" + cnt[0]);
+                //debugmsg Util.toast("Wifi信息上传成功:" + cnt[0] + "/" + cnt[0]);
+                Util.toast("wifi安全性分析完成");
             } else if(cnt[0]==0) {
                 //全部上传失败
                 Util.toast("Wifi信息上传失败:" + cnt[0] + "/" + cnt[1]);
