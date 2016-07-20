@@ -33,7 +33,7 @@
         </service>
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="drhroCqAcPASpMfL2t7GGvP7vwSGLzcb" />
+            android:value="9rG4v5RunbG0Ngb2Ippoq06o1EjaxtiV" />
         <activity
             android:name=".activity.HomeActivity"
             android:label="@string/app_name"
@@ -45,6 +45,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".service.SendAPAcessRecordService"/>
     </application>
 
 </manifest>

@@ -242,7 +242,7 @@ public class WifiListFragment extends Fragment implements View.OnClickListener {
                     public void onErrorResponse(VolleyError error) {
                         cnt[1]++;
                         checkResult();
-                        Log.e("error", error.getMessage(), error);
+                        Log.e("VolleyError", error.getMessage(), error);
                     }
                 });
         new Thread(new Runnable() {
