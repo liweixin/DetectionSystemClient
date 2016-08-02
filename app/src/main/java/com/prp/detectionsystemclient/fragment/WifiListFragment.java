@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.TimeUtils;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -30,14 +29,15 @@ import com.baidu.location.Poi;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.prp.detectionsystemclient.MyApplication;
 import com.prp.detectionsystemclient.R;
-import com.prp.detectionsystemclient.RecyclerView2.MyWifiInfoAdapter;
-import com.prp.detectionsystemclient.RecyclerView2.MyWifiInfoDecoration;
-import com.prp.detectionsystemclient.RecyclerView2.MyWifiInfo;
-import com.prp.detectionsystemclient.RecyclerView2.MyWifiInfoOnItemClickListener;
+import com.prp.detectionsystemclient.RecyclerView.MyWifiInfoAdapter;
+import com.prp.detectionsystemclient.RecyclerView.MyWifiInfoDecoration;
+import com.prp.detectionsystemclient.RecyclerView.MyWifiInfo;
+import com.prp.detectionsystemclient.RecyclerView.MyWifiInfoOnItemClickListener;
 import com.prp.detectionsystemclient.function.ScanAndUploeadNearbyWifi;
 import com.prp.detectionsystemclient.function.TraceRoute;
 import com.prp.detectionsystemclient.network.Network;
 import com.prp.detectionsystemclient.network.StringPostRequest;
+import com.prp.detectionsystemclient.util.Settings;
 import com.prp.detectionsystemclient.util.Util;
 import com.prp.detectionsystemclient.view.TabButton;
 
@@ -60,19 +60,17 @@ public class WifiListFragment extends Fragment implements View.OnClickListener {
 
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
+    LinearLayout progressGroup;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstance) {
         mView = inflater.inflate(R.layout.fragment_wifilist, container, false);
-        LinearLayout layout = (LinearLayout) mView.findViewById(R.id.myWifi);
-        LinearLayout progressGroup = (LinearLayout) mView.findViewById(R.id.progress_group);
+        progressGroup = (LinearLayout) mView.findViewById(R.id.progress_group);
         List<?> list = ScanAndUploeadNearbyWifi.getWifiList();
-        if(list!=null&&cnt[0]==list.size()){
-            layout.setVisibility(View.GONE);
+        if(list!=null&&success==list.size()){
             progressGroup.setVisibility(View.GONE);
         } else {
             //progressGroup.setVisibility(View.VISIBLE);
-            layout.setVisibility(View.GONE);
         }
         //重新设置数值，当fragment重新载入后可以获取值
         if(bnp!=null){
@@ -190,7 +188,15 @@ public class WifiListFragment extends Fragment implements View.OnClickListener {
     }
 
     //表示上传成功&失败的wifi数量
-    final int[] cnt = {0, 0};
+    //final int[] cnt = {0, 0};
+    static int success = 0;
+    static int fail = 0;
+    public synchronized void addSuccess(){
+        success++;
+    }
+    public synchronized void addFail(){
+        fail++;
+    }
     public void mOnReceiveLocation(BDLocation location){
         mLocationClient.stop();//定位一次即关闭定位功能
         Log.d("receive location", "haha");
@@ -206,41 +212,23 @@ public class WifiListFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onResponse(String response) {
                         if(response.equals("{'info': 'Update Success.', 'code': 1}")){
-                            //不能用cnt,因为cnt是内部类中引用的外部变量，必须声明为final，而tinal int cnt无法改变其值
-                            cnt[0]++;
+                            addSuccess();
                             int size = ScanAndUploeadNearbyWifi.getWifiList().size();
-                            if(cnt[0]==size){
+                            if(success==size){
                                 //所有wifi均成功上传，设置进度条满。
                                 bnp.setProgress(100);
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try{
-                                            Thread.sleep(1000);
-                                        } catch (Exception e){
-                                            e.printStackTrace();
-                                        }
-                                        getActivity().runOnUiThread(new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                LinearLayout layout = (LinearLayout) mView.findViewById(R.id.progress_group);
-                                                layout.setVisibility(View.GONE);
-                                            }
-                                        }));
-                                    }
-                                }).start();
                             } else {
                                 bnp.incrementProgressBy(100/size);
                             }
                         }
-                        Log.e(ScanAndUploeadNearbyWifi.getWifiList().size()+"", cnt[0]+"");
+                        Log.e(ScanAndUploeadNearbyWifi.getWifiList().size()+"", success+"");
                         checkResult();
                         Log.d("response", response);
                     }
                 },  new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        cnt[1]++;
+                        addFail();
                         checkResult();
                         Log.e("VolleyError", error.getMessage(), error);
                     }
@@ -284,17 +272,52 @@ public class WifiListFragment extends Fragment implements View.OnClickListener {
         initRecyclerView();
     }
     public void checkResult(){
-        if(cnt[0]+cnt[1]==ScanAndUploeadNearbyWifi.getWifiList().size()){
-            if(cnt[1]==0){
+        if(success+fail==ScanAndUploeadNearbyWifi.getWifiList().size()){
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressGroup.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            }).start();
+
+            if(fail==0){
                 //全部上传成功
-                //debugmsg Util.toast("Wifi信息上传成功:" + cnt[0] + "/" + cnt[0]);
-                Util.toast("wifi安全性分析完成");
-            } else if(cnt[0]==0) {
+                switch (Settings.mode){
+                    case Settings.RELEASE:
+                        Util.toast("wifi安全性分析完成");
+                        break;
+                    case Settings.TEST:
+                        Util.toast("Wifi信息上传成功:" + success + "/" + success);
+                }
+            } else if(success==0) {
                 //全部上传失败
-                Util.toast("Wifi信息上传失败:" + cnt[0] + "/" + cnt[1]);
+                switch (Settings.mode){
+                    case Settings.RELEASE:
+                        Util.toast("wifi安全性分析失败");
+                        break;
+                    case Settings.TEST:
+                        Util.toast("Wifi信息上传失败:" + success + "/" + fail);
+                }
             } else {
                 //部分上传成功
-                Util.toast("Wifi信息部分上传成功" + cnt[0] + "/" + (cnt[0]+cnt[1]));
+                switch (Settings.mode){
+                    case Settings.RELEASE:
+                        Util.toast("wifi安全性分析部分失败");
+                        break;
+                    case Settings.TEST:
+                        Util.toast("Wifi信息部分上传成功" + success + "/" + (success+fail));
+                }
             }
         }
     }

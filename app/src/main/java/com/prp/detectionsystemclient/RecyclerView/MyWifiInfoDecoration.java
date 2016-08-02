@@ -1,4 +1,4 @@
-package com.prp.detectionsystemclient.RecyclerView2;
+package com.prp.detectionsystemclient.RecyclerView;
 
 import android.content.Context;
 import android.content.res.TypedArray;

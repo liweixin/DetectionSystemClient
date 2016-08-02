@@ -1,4 +1,4 @@
-package com.prp.detectionsystemclient.RecyclerView2;
+package com.prp.detectionsystemclient.RecyclerView;
 
 import android.view.View;
 
