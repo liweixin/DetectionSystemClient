@@ -6,6 +6,8 @@ import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 
 import com.prp.detectionsystemclient.broadcastReceiver.WifiStateReceiver;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 /**
  * Created by lwx on 2016/6/2.
@@ -13,9 +15,13 @@ import com.prp.detectionsystemclient.broadcastReceiver.WifiStateReceiver;
 public class MyApplication extends Application {
     private Context context;
     public static MyApplication instance;
+    private RefWatcher refWatcher;
     @Override
     public void onCreate(){
         super.onCreate();
+
+        refWatcher = LeakCanary.install(this);
+
         instance = this;
         //监听wifi状态变化
         WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
